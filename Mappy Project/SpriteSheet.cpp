@@ -53,9 +53,32 @@ void Sprite::UpdateSprites(int width, int height, int dir)
 			if (++curFrame > 7)
 				curFrame=4;
 		}
-	}else //represent that they hit the space bar and that mean direction = 0
+	}
+	else if (dir == 2) { //Down key
+		animationDirection = 2;
+		animationRows = 0;
+		y += 2;
+		if (++frameCount > frameDelay)
+		{
+			frameCount = 0;
+			if (++curFrame > 3)
+				curFrame = 0;
+		}
+	}
+	else if (dir == 3) {
+		animationDirection = 3;
+		animationRows = 3;
+		y -= 2;
+		if (++frameCount > frameDelay)
+		{
+			frameCount = 0;
+			if (++curFrame > 15)
+				curFrame = 12;
+		}
+	}
+	else {
 		animationDirection = dir;
-
+	}
 	//check for collided with foreground tiles
 	if (animationDirection==0)
 	{ 
@@ -89,9 +112,17 @@ void Sprite::DrawSprites(int xoffset, int yoffset)
 
 	if (animationDirection==1){
 		al_draw_bitmap_region(image, fx, fy, frameWidth,frameHeight, x-xoffset, y-yoffset, 0);
-	}else if (animationDirection == 0 ){
+	}
+	else if (animationDirection == 0 ){
 		al_draw_bitmap_region(image, fx, fy, frameWidth,frameHeight, x-xoffset, y-yoffset, 0);
-	}else if (animationDirection == 2 ){
+	}
+	else if (animationDirection == 2 ) {
+		al_draw_bitmap_region(image, fx, fy, frameWidth, frameHeight, x - xoffset, y - yoffset, 0);
+	}
+	else if (animationDirection == 3 ) {
+		al_draw_bitmap_region(image, fx, fy, frameWidth, frameHeight, x - xoffset, y - yoffset, 0);
+	}
+	else if (animationDirection == 4 ){
 		al_draw_bitmap_region(image,0,0,frameWidth,frameHeight,  x-xoffset, y-yoffset, 0);
 
 	}

@@ -70,16 +70,16 @@ int main(void)
 		if(ev.type == ALLEGRO_EVENT_TIMER)
 		{
 			render = true;
-			if(keys[UP])
-				;
-			else if(keys[DOWN])
-				;
+			if (keys[UP])
+				player.UpdateSprites(WIDTH, HEIGHT, 3);
+			else if (keys[DOWN])
+				player.UpdateSprites(WIDTH, HEIGHT, 2);
 			else if(keys[LEFT])
 				player.UpdateSprites(WIDTH,HEIGHT,0);
 			else if(keys[RIGHT])
 				player.UpdateSprites(WIDTH,HEIGHT,1);
 			else
-				player.UpdateSprites(WIDTH,HEIGHT,2);
+				player.UpdateSprites(WIDTH,HEIGHT,4);
 			if (player.CollisionEndBlock())
 				cout<<"Hit an End Block\n";
 			render = true;
