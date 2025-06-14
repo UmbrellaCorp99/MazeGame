@@ -10,20 +10,20 @@ Sprite::~Sprite()
 }
 void Sprite::InitSprites(int width, int height)
 {
-	x = 80;
-	y = -10;
+	x = 30;
+	y = 100;
 
 
-	maxFrame = 8;
+	maxFrame = 4;
 	curFrame = 0;
 	frameCount = 0;
 	frameDelay = 6;
-	frameWidth = 50;
+	frameWidth = 64;
 	frameHeight = 64;
-	animationColumns = 8;
+	animationColumns = 4;
 	animationDirection = 1;
 
-	image = al_load_bitmap("guy.bmp");
+	image = al_load_bitmap("guy2.png");
 	al_convert_mask_to_alpha(image, al_map_rgb(255,0,255));
 }
 
@@ -38,8 +38,8 @@ void Sprite::UpdateSprites(int width, int height, int dir)
 		if (++frameCount > frameDelay)
 		{
 			frameCount=0;
-			if (++curFrame > maxFrame)
-				curFrame=1;
+			if (++curFrame > 11)
+				curFrame=8;
 		}
 	} else if (dir == 0){ //left key
 		animationDirection = 0; 
@@ -47,8 +47,8 @@ void Sprite::UpdateSprites(int width, int height, int dir)
 		if (++frameCount > frameDelay)
 		{
 			frameCount=0;
-			if (++curFrame > maxFrame)
-				curFrame=1;
+			if (++curFrame > 7)
+				curFrame=4;
 		}
 	}else //represent that they hit the space bar and that mean direction = 0
 		animationDirection = dir;
@@ -82,12 +82,12 @@ bool Sprite::CollisionEndBlock()
 void Sprite::DrawSprites(int xoffset, int yoffset)
 {
 	int fx = (curFrame % animationColumns) * frameWidth;
-	int fy = (curFrame / animationColumns) * frameHeight;
+	int fy = (curFrame % animationColumns) * frameHeight;
 
 	if (animationDirection==1){
 		al_draw_bitmap_region(image, fx, fy, frameWidth,frameHeight, x-xoffset, y-yoffset, 0);
 	}else if (animationDirection == 0 ){
-		al_draw_bitmap_region(image, fx, fy, frameWidth,frameHeight, x-xoffset, y-yoffset, ALLEGRO_FLIP_HORIZONTAL);
+		al_draw_bitmap_region(image, fx, fy, frameWidth,frameHeight, x-xoffset, y-yoffset, 0);
 	}else if (animationDirection == 2 ){
 		al_draw_bitmap_region(image,0,0,frameWidth,frameHeight,  x-xoffset, y-yoffset, 0);
 

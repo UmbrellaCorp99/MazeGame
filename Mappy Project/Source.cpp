@@ -19,8 +19,6 @@ int main(void)
 	bool render = false;
 	//Player Variable
 	Sprite player;
-	const int JUMPIT=1600;
-	int jump = JUMPIT;
 
 
 
@@ -47,7 +45,7 @@ int main(void)
 
 	int xOff = 0;
 	int yOff = 0;
-	if(MapLoad("sample.fmp", 1))
+	if(MapLoad("maze1.FMP", 1))
 		return -5;
 
 	event_queue = al_create_event_queue();
@@ -112,8 +110,6 @@ int main(void)
 				break;
 			case ALLEGRO_KEY_SPACE:
 				keys[SPACE] = true;
-				jump=30;
-
 			}
 		}
 		else if(ev.type == ALLEGRO_EVENT_KEY_UP)
@@ -163,7 +159,6 @@ int main(void)
 
 			//draw foreground tiles
 			MapDrawFG(xOff,yOff, 0, 0, WIDTH, HEIGHT, 0);
-			jump=player.jumping(jump,JUMPIT);
 			player.DrawSprites(xOff, yOff);
 			al_flip_display();
 			al_clear_to_color(al_map_rgb(0,0,0));
