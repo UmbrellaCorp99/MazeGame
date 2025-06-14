@@ -21,6 +21,7 @@ void Sprite::InitSprites(int width, int height)
 	frameWidth = 64;
 	frameHeight = 64;
 	animationColumns = 4;
+	animationRows = 4;
 	animationDirection = 1;
 
 	image = al_load_bitmap("guy2.png");
@@ -33,7 +34,8 @@ void Sprite::UpdateSprites(int width, int height, int dir)
 	int oldy = y;
 
 	if(dir == 1){ //right key
-		animationDirection = 1; 
+		animationDirection = 1;
+		animationRows = 2;
 		x+=2; 
 		if (++frameCount > frameDelay)
 		{
@@ -43,6 +45,7 @@ void Sprite::UpdateSprites(int width, int height, int dir)
 		}
 	} else if (dir == 0){ //left key
 		animationDirection = 0; 
+		animationRows = 1;
 		x-=2; 
 		if (++frameCount > frameDelay)
 		{
@@ -82,7 +85,7 @@ bool Sprite::CollisionEndBlock()
 void Sprite::DrawSprites(int xoffset, int yoffset)
 {
 	int fx = (curFrame % animationColumns) * frameWidth;
-	int fy = (curFrame % animationColumns) * frameHeight;
+	int fy = animationRows * frameHeight;
 
 	if (animationDirection==1){
 		al_draw_bitmap_region(image, fx, fy, frameWidth,frameHeight, x-xoffset, y-yoffset, 0);
