@@ -28,12 +28,12 @@ void Sprite::InitSprites(int width, int height)
 	al_convert_mask_to_alpha(image, al_map_rgb(255,0,255));
 }
 
-void Sprite::setX(float x) {
-	this->x = x;
+void Sprite::setX(float f) {
+	x = f;
 }
 
-void Sprite::setY(float y) {
-	this->y = y;
+void Sprite::setY(float f) {
+	y = f;
 }
 
 void Sprite::UpdateSprites(int width, int height, int dir)
@@ -90,7 +90,7 @@ void Sprite::UpdateSprites(int width, int height, int dir)
 	//check for collided with foreground tiles
 	if (animationDirection==0)
 	{ 
-		if (collided(x + frameWidth/3, y + frameHeight)) { //collision detection to the left
+		if (collided(x + frameWidth/2, y + frameHeight)) { //collision detection to the left
 			x = oldx; 
 			y= oldy;
 		}
@@ -98,19 +98,19 @@ void Sprite::UpdateSprites(int width, int height, int dir)
 	}
 	else if (animationDirection ==1)
 	{ 
-		if (collided(x + (frameWidth*.7), y + frameHeight)) { //collision detection to the right
+		if (collided(x + frameWidth/2, y + frameHeight)) { //collision detection to the right
 			x = oldx; 
 			y= oldy;
 		}
 	}
 	else if (animationDirection == 2) {
-		if (collided(x + frameHeight/3, y + frameHeight)) {
+		if (collided(x + frameHeight/2, y + frameHeight)) {
 			x = oldx;
 			y = oldy;
 		}
 	}
 	else if (animationDirection == 3) {
-		if (collided(x + frameHeight/3, y)) {
+		if (collided(x + frameHeight/2, y)) {
 			x = oldx;
 			y = oldy;
 		}
