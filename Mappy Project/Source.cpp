@@ -1,6 +1,8 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_primitives.h>
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_ttf.h>
 #include "SpriteSheet.h"
 #include "mappy_A5.h"
 #include <iostream>
@@ -33,7 +35,6 @@ int main(void)
 
 	void* countdown(ALLEGRO_THREAD* ptr, void* arg);
 
-
 	//program init
 	if(!al_init())										//initialize Allegro
 		return -1;
@@ -46,8 +47,11 @@ int main(void)
 	//addon init
 	al_install_keyboard();
 	al_init_image_addon();
+	al_init_font_addon();
+	al_init_ttf_addon();
 	al_init_primitives_addon();
 
+	ALLEGRO_FONT* font = al_load_font("Movistar Text Regular.ttf", 64, 0);
 	player.InitSprites(WIDTH,HEIGHT);
 
 	int xOff = 0;
@@ -76,7 +80,13 @@ int main(void)
 	while(!done)
 	{
 		if (timeout) {
-			std::cout << "time is out" << std::endl;
+			
+			MapDrawBG(xOff, yOff, 0, 0, WIDTH, HEIGHT);
+			MapDrawFG(xOff, yOff, 0, 0, WIDTH, HEIGHT, 0);
+			al_draw_text(font, al_map_rgb(255, 255, 0), WIDTH / 2, HEIGHT / 2, ALLEGRO_ALIGN_CENTER, "Time is up!");
+			al_flip_display();
+			al_clear_to_color(al_map_rgb(0, 0, 0));
+			al_rest(5);
 			done = true;
 		}
 		ALLEGRO_EVENT ev;
@@ -122,7 +132,12 @@ int main(void)
 					al_start_thread(create1);
 				}
 				else if (count == 2 && player.CollisionEndBlock()) {
-					std::cout << "game over" << std::endl;
+					
+					MapDrawBG(xOff, yOff, 0, 0, WIDTH, HEIGHT);
+					MapDrawFG(xOff, yOff, 0, 0, WIDTH, HEIGHT, 0);
+					al_draw_text(font, al_map_rgb(255, 0, 0), WIDTH / 2, HEIGHT / 2, 0, "You win!");
+					al_flip_display();
+					al_clear_to_color(al_map_rgb(0, 0, 0));
 					done = true;
 				}
 			}
@@ -210,6 +225,7 @@ int main(void)
 		}
 	}
 	MapFreeMem();
+	al_destroy_font(font);
 	al_destroy_thread(create1);
 	al_destroy_event_queue(event_queue);
 	al_destroy_display(display);						//destroy our display object
@@ -246,7 +262,7 @@ void* countdown(ALLEGRO_THREAD* ptr, void* arg) {
 	time_t startTime, currentTime;
 	startTime = time(NULL);
 	currentTime = time(NULL);
-	while (currentTime - startTime < 60 && !done) {
+	while (currentTime - startTime < 10 && !done) {
 		currentTime = time(NULL);
 	}
 	timeout = true;
