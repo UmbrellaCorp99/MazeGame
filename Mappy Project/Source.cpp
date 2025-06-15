@@ -45,7 +45,7 @@ int main(void)
 
 	int xOff = 0;
 	int yOff = 0;
-	if(MapLoad("maze1.FMP", 1))
+	if(MapLoad("test.FMP", 1))
 		return -5;
 
 	event_queue = al_create_event_queue();
