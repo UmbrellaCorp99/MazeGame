@@ -17,6 +17,7 @@ int main(void)
 	//variables
 	bool done = false;
 	bool render = false;
+	int count = 0;
 	//Player Variable
 	Sprite player;
 
@@ -81,7 +82,14 @@ int main(void)
 			else
 				player.UpdateSprites(WIDTH,HEIGHT,4);
 			if (player.CollisionEndBlock())
-				cout<<"Hit an End Block\n";
+				if (count == 0) {
+					MapLoad("test2.FMP", 1);
+					MapDrawBG(xOff, yOff, 0, 0, WIDTH - 1, HEIGHT - 1);
+					MapDrawFG(xOff, yOff, 0, 0, WIDTH - 1, HEIGHT - 1, 0);
+					player.DrawSprites(0, 0);
+					al_flip_display();
+					al_clear_to_color(al_map_rgb(0, 0, 0));
+				}
 			render = true;
 
 		}
@@ -160,6 +168,7 @@ int main(void)
 			//draw foreground tiles
 			MapDrawFG(xOff,yOff, 0, 0, WIDTH, HEIGHT, 0);
 			player.DrawSprites(xOff, yOff);
+			MapUpdateAnims();
 			al_flip_display();
 			al_clear_to_color(al_map_rgb(0,0,0));
 		}
