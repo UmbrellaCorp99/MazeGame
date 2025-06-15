@@ -21,7 +21,7 @@ int main(void)
 	bool done = false;
 	bool render = false;
 	int count = 0;
-	int countdown = 0;
+	int countdown = 60;
 	//Player Variable
 	Sprite player;
 
@@ -73,7 +73,7 @@ int main(void)
 	al_clear_to_color(al_map_rgb(0,0,0));
 	while(!done)
 	{
-		if (countdown == 60) {
+		if (countdown == 0) {
 			
 			MapDrawBG(xOff, yOff, 0, 0, WIDTH, HEIGHT);
 			MapDrawFG(xOff, yOff, 0, 0, WIDTH, HEIGHT, 0);
@@ -102,7 +102,7 @@ int main(void)
 				if (count == 0) {
 					al_stop_timer(timer);
 					al_set_timer_count(timer, 0);
-					countdown = 0;
+					countdown = 60;
 					al_start_timer(timer);
 					MapLoad("test2.FMP", 1);
 					MapDrawBG(xOff, yOff, 0, 0, WIDTH - 1, HEIGHT - 1);
@@ -117,7 +117,7 @@ int main(void)
 				else if (count == 1) {
 					al_stop_timer(timer);
 					al_set_timer_count(timer, 0);
-					countdown = 0;
+					countdown = 60;
 					al_start_timer(timer);
 					MapLoad("test3.FMP", 1);
 					MapDrawBG(xOff, yOff, 0, 0, WIDTH - 1, HEIGHT - 1);
@@ -132,7 +132,7 @@ int main(void)
 				else if (count == 2 && player.CollisionEndBlock()) {
 					MapDrawBG(xOff, yOff, 0, 0, WIDTH, HEIGHT);
 					MapDrawFG(xOff, yOff, 0, 0, WIDTH, HEIGHT, 0);
-					al_draw_text(font, al_map_rgb(255, 0, 0), WIDTH / 2, HEIGHT / 2, 0, "You win!");
+					al_draw_text(font, al_map_rgb(255, 0, 0), WIDTH / 2, HEIGHT / 2, ALLEGRO_ALIGN_CENTER, "You win!");
 					al_flip_display();
 					al_clear_to_color(al_map_rgb(0, 0, 0));
 					al_rest(5);
@@ -140,7 +140,7 @@ int main(void)
 				}
 			}
 			if (al_get_timer_count(timer) % 60 == 0) {
-				countdown++;
+				countdown--;
 			}
 			render = true;
 
