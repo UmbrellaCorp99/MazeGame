@@ -11,7 +11,7 @@ Sprite::~Sprite()
 void Sprite::InitSprites(int width, int height)
 {
 	x = 30;
-	y = 80;
+	y = 120;
 
 
 	maxFrame = 4;
@@ -90,19 +90,19 @@ void Sprite::UpdateSprites(int width, int height, int dir)
 	}
 	else if (animationDirection ==1)
 	{ 
-		if (collided(x + frameWidth - (frameWidth/3), y + frameHeight)) { //collision detection to the right
+		if (collided(x + (frameWidth*.7), y + frameHeight)) { //collision detection to the right
 			x = oldx; 
 			y= oldy;
 		}
 	}
 	else if (animationDirection == 2) {
-		if (collided(x + frameWidth / 2, y + frameHeight)) {
+		if (collided(x + frameHeight/3, y + frameHeight)) {
 			x = oldx;
 			y = oldy;
 		}
 	}
 	else if (animationDirection == 3) {
-		if (collided(x + frameWidth / 2, y)) {
+		if (collided(x + frameHeight/3, y)) {
 			x = oldx;
 			y = oldy;
 		}
