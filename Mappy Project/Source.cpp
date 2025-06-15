@@ -10,8 +10,7 @@ using namespace std;
 
 int collided(int x, int y);  //Tile Collision
 bool endValue( int x, int y ); //End Block with the User Value = 8
-bool done = false;
-bool timeout = false;
+
 int main(void)
 {
 	const int WIDTH = 900;
@@ -19,10 +18,10 @@ int main(void)
 	bool keys[] = {false, false, false, false, false};
 	enum KEYS{UP, DOWN, LEFT, RIGHT, SPACE};
 	//variables
-	
+	bool done = false;
 	bool render = false;
 	int count = 0;
-	
+	int countdown = 0;
 	//Player Variable
 	Sprite player;
 
@@ -74,7 +73,7 @@ int main(void)
 	al_clear_to_color(al_map_rgb(0,0,0));
 	while(!done)
 	{
-		if (timeout) {
+		if (countdown == 60) {
 			
 			MapDrawBG(xOff, yOff, 0, 0, WIDTH, HEIGHT);
 			MapDrawFG(xOff, yOff, 0, 0, WIDTH, HEIGHT, 0);
@@ -101,6 +100,10 @@ int main(void)
 				player.UpdateSprites(WIDTH,HEIGHT,4);
 			if (player.CollisionEndBlock()) {
 				if (count == 0) {
+					al_stop_timer(timer);
+					al_set_timer_count(timer, 0);
+					countdown = 0;
+					al_start_timer(timer);
 					MapLoad("test2.FMP", 1);
 					MapDrawBG(xOff, yOff, 0, 0, WIDTH - 1, HEIGHT - 1);
 					MapDrawFG(xOff, yOff, 0, 0, WIDTH - 1, HEIGHT - 1, 0);
@@ -112,6 +115,10 @@ int main(void)
 					count++;
 				}
 				else if (count == 1) {
+					al_stop_timer(timer);
+					al_set_timer_count(timer, 0);
+					countdown = 0;
+					al_start_timer(timer);
 					MapLoad("test3.FMP", 1);
 					MapDrawBG(xOff, yOff, 0, 0, WIDTH - 1, HEIGHT - 1);
 					MapDrawFG(xOff, yOff, 0, 0, WIDTH - 1, HEIGHT - 1, 0);
@@ -123,14 +130,17 @@ int main(void)
 					count++;
 				}
 				else if (count == 2 && player.CollisionEndBlock()) {
-					
 					MapDrawBG(xOff, yOff, 0, 0, WIDTH, HEIGHT);
 					MapDrawFG(xOff, yOff, 0, 0, WIDTH, HEIGHT, 0);
 					al_draw_text(font, al_map_rgb(255, 0, 0), WIDTH / 2, HEIGHT / 2, 0, "You win!");
 					al_flip_display();
 					al_clear_to_color(al_map_rgb(0, 0, 0));
+					al_rest(5);
 					done = true;
 				}
+			}
+			if (al_get_timer_count(timer) % 60 == 0) {
+				countdown++;
 			}
 			render = true;
 
@@ -211,6 +221,7 @@ int main(void)
 			MapDrawFG(xOff,yOff, 0, 0, WIDTH, HEIGHT, 0);
 			player.DrawSprites(xOff, yOff);
 			MapUpdateAnims();
+			al_draw_textf(font, al_map_rgb(255, 255, 0), 0, 0, 0, "%i", countdown);
 			al_flip_display();
 			al_clear_to_color(al_map_rgb(0,0,0));
 		}
@@ -243,18 +254,4 @@ bool endValue( int x, int y )
 		return true;
 	}else
 		return false;
-}
-
-//This function manages the timer for the game
-//It takes allegro thread and void pointers as parameters
-//No return
-void* countdown(ALLEGRO_THREAD* ptr, void* arg) {
-	time_t startTime, currentTime;
-	startTime = time(NULL);
-	currentTime = time(NULL);
-	while (currentTime - startTime < 60 && !done) {
-		currentTime = time(NULL);
-	}
-	timeout = true;
-	return NULL;
 }
