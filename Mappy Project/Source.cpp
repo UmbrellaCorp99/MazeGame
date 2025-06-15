@@ -33,8 +33,6 @@ int main(void)
 	ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 	ALLEGRO_TIMER *timer;
 
-	void* countdown(ALLEGRO_THREAD* ptr, void* arg);
-
 	//program init
 	if(!al_init())										//initialize Allegro
 		return -1;
@@ -66,8 +64,6 @@ int main(void)
 	al_register_event_source(event_queue, al_get_keyboard_event_source());
 	al_start_timer(timer);
 
-	ALLEGRO_THREAD* create1 = NULL;
-	create1 = al_create_thread(countdown, NULL);
 	//draw the background tiles
 	MapDrawBG(xOff,yOff, 0, 0, WIDTH-1, HEIGHT-1);
 
@@ -76,7 +72,6 @@ int main(void)
 	player.DrawSprites(0,0);
 	al_flip_display();
 	al_clear_to_color(al_map_rgb(0,0,0));
-	al_start_thread(create1);
 	while(!done)
 	{
 		if (timeout) {
@@ -115,8 +110,6 @@ int main(void)
 					al_flip_display();
 					al_clear_to_color(al_map_rgb(0, 0, 0));
 					count++;
-					al_destroy_thread(create1);
-					al_start_thread(create1);
 				}
 				else if (count == 1) {
 					MapLoad("test3.FMP", 1);
@@ -128,8 +121,6 @@ int main(void)
 					al_flip_display();
 					al_clear_to_color(al_map_rgb(0, 0, 0));
 					count++;
-					al_destroy_thread(create1);
-					al_start_thread(create1);
 				}
 				else if (count == 2 && player.CollisionEndBlock()) {
 					
@@ -226,7 +217,6 @@ int main(void)
 	}
 	MapFreeMem();
 	al_destroy_font(font);
-	al_destroy_thread(create1);
 	al_destroy_event_queue(event_queue);
 	al_destroy_display(display);						//destroy our display object
 
@@ -262,7 +252,7 @@ void* countdown(ALLEGRO_THREAD* ptr, void* arg) {
 	time_t startTime, currentTime;
 	startTime = time(NULL);
 	currentTime = time(NULL);
-	while (currentTime - startTime < 10 && !done) {
+	while (currentTime - startTime < 60 && !done) {
 		currentTime = time(NULL);
 	}
 	timeout = true;
