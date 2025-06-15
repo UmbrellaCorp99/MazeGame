@@ -10,7 +10,7 @@ Sprite::~Sprite()
 }
 void Sprite::InitSprites(int width, int height)
 {
-	x = 30;
+	x = 40;
 	y = 120;
 
 

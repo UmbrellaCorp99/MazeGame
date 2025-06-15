@@ -46,7 +46,7 @@ int main(void)
 
 	int xOff = 0;
 	int yOff = 0;
-	if(MapLoad("test.FMP", 1))
+	if(MapLoad("test3.FMP", 1))
 		return -5;
 
 	event_queue = al_create_event_queue();
@@ -86,7 +86,7 @@ int main(void)
 					MapLoad("test2.FMP", 1);
 					MapDrawBG(xOff, yOff, 0, 0, WIDTH - 1, HEIGHT - 1);
 					MapDrawFG(xOff, yOff, 0, 0, WIDTH - 1, HEIGHT - 1, 0);
-					player.setX(30);
+					player.setX(40);
 					player.setY(120);
 					player.DrawSprites(0, 0);
 					al_flip_display();
