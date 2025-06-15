@@ -1,13 +1,26 @@
+//Alexander Young
+//Maze Game
 #include "SpriteSheet.h"
 
+//This is a constructor for the Sprite class
+//Takes no parameters
+//No return
 Sprite::Sprite()
 {
 	image=NULL;
 }
+
+//This is a deconstructor for the sprite class
+//Takes no parameters
+//No return
 Sprite::~Sprite()
 {
 	al_destroy_bitmap(image);
 }
+
+//This function spawns the sprite in the display
+//Takes two integers representing the display width and height
+//No return
 void Sprite::InitSprites(int width, int height)
 {
 	x = 40;
@@ -28,14 +41,23 @@ void Sprite::InitSprites(int width, int height)
 	al_convert_mask_to_alpha(image, al_map_rgb(255,0,255));
 }
 
+//Setter for the x variable
+//Takes a float as a parameter
+//No return
 void Sprite::setX(float f) {
 	x = f;
 }
 
+//Setter for the y variable
+//Takes a float as a parameter
+//No return
 void Sprite::setY(float f) {
 	y = f;
 }
 
+//This function updates a sprite's location and animation sequence on a screen
+//Takes two integers representing the display width and height and an integer representing the direction
+//No return
 void Sprite::UpdateSprites(int width, int height, int dir)
 {
 	int oldx = x;
@@ -117,6 +139,9 @@ void Sprite::UpdateSprites(int width, int height, int dir)
 	}
 }
 
+//This function detects if a sprite collides with an endblock
+//Takes no parameters
+//Returns a boolean
 bool Sprite::CollisionEndBlock()
 {
 	if (endValue(x + frameWidth , y + frameHeight/2))
@@ -125,6 +150,9 @@ bool Sprite::CollisionEndBlock()
 		return false;
 }
 
+//This function draws a sprite at the x and y position on the display at the current animaton sequence
+//Takes two integers representing the x and y offset
+//No return
 void Sprite::DrawSprites(int xoffset, int yoffset)
 {
 	int fx = (curFrame % animationColumns) * frameWidth;

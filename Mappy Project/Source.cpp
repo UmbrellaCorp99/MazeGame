@@ -1,3 +1,6 @@
+//Alexander Young
+//Maze Game
+
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_primitives.h>
@@ -20,7 +23,9 @@ int main(void)
 	//variables
 	bool done = false;
 	bool render = false;
+	//controller variable for the map
 	int count = 0;
+	//variable for the time remaining to be printed
 	int countdown = 60;
 	//Player Variable
 	Sprite player;
@@ -73,8 +78,8 @@ int main(void)
 	al_clear_to_color(al_map_rgb(0,0,0));
 	while(!done)
 	{
+		//If the countdown reaches zero, the game ends after a message
 		if (countdown == 0) {
-			
 			MapDrawBG(xOff, yOff, 0, 0, WIDTH, HEIGHT);
 			MapDrawFG(xOff, yOff, 0, 0, WIDTH, HEIGHT, 0);
 			al_draw_text(font, al_map_rgb(255, 255, 0), WIDTH / 2, HEIGHT / 2, ALLEGRO_ALIGN_CENTER, "Time is up!");
@@ -98,6 +103,7 @@ int main(void)
 				player.UpdateSprites(WIDTH,HEIGHT,1);
 			else
 				player.UpdateSprites(WIDTH,HEIGHT,4);
+			//If player touches an endblock, reset the timer and load the next map in the sequence. If it is the last map, show the winning screen
 			if (player.CollisionEndBlock()) {
 				if (count == 0) {
 					al_stop_timer(timer);
@@ -139,6 +145,7 @@ int main(void)
 					done = true;
 				}
 			}
+			//Decrement countdown every second
 			if (al_get_timer_count(timer) % 60 == 0) {
 				countdown--;
 			}
