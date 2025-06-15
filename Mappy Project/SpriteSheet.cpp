@@ -28,6 +28,14 @@ void Sprite::InitSprites(int width, int height)
 	al_convert_mask_to_alpha(image, al_map_rgb(255,0,255));
 }
 
+void Sprite::setX(float x) {
+	this->x = x;
+}
+
+void Sprite::setY(float y) {
+	this->y = y;
+}
+
 void Sprite::UpdateSprites(int width, int height, int dir)
 {
 	int oldx = x;
@@ -36,7 +44,7 @@ void Sprite::UpdateSprites(int width, int height, int dir)
 	if(dir == 1){ //right key
 		animationDirection = 1;
 		animationRows = 2;
-		x+=2; 
+		x+=3; 
 		if (++frameCount > frameDelay)
 		{
 			frameCount=0;
@@ -46,7 +54,7 @@ void Sprite::UpdateSprites(int width, int height, int dir)
 	} else if (dir == 0){ //left key
 		animationDirection = 0; 
 		animationRows = 1;
-		x-=2; 
+		x-=3; 
 		if (++frameCount > frameDelay)
 		{
 			frameCount=0;
@@ -57,7 +65,7 @@ void Sprite::UpdateSprites(int width, int height, int dir)
 	else if (dir == 2) { //Down key
 		animationDirection = 2;
 		animationRows = 0;
-		y += 2;
+		y += 3;
 		if (++frameCount > frameDelay)
 		{
 			frameCount = 0;
@@ -68,7 +76,7 @@ void Sprite::UpdateSprites(int width, int height, int dir)
 	else if (dir == 3) {
 		animationDirection = 3;
 		animationRows = 3;
-		y -= 2;
+		y -= 3;
 		if (++frameCount > frameDelay)
 		{
 			frameCount = 0;
@@ -111,7 +119,7 @@ void Sprite::UpdateSprites(int width, int height, int dir)
 
 bool Sprite::CollisionEndBlock()
 {
-	if (endValue(x + frameWidth/2, y + frameHeight + 5))
+	if (endValue(x + frameWidth , y + frameHeight/2))
 		return true;
 	else
 		return false;

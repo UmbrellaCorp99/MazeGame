@@ -86,6 +86,8 @@ int main(void)
 					MapLoad("test2.FMP", 1);
 					MapDrawBG(xOff, yOff, 0, 0, WIDTH - 1, HEIGHT - 1);
 					MapDrawFG(xOff, yOff, 0, 0, WIDTH - 1, HEIGHT - 1, 0);
+					player.setX(30);
+					player.setY(120);
 					player.DrawSprites(0, 0);
 					al_flip_display();
 					al_clear_to_color(al_map_rgb(0, 0, 0));

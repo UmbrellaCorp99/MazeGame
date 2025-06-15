@@ -17,6 +17,8 @@ public:
 	bool CollideSprite();
 	float getX() {return x;}
 	float getY() {return y;}
+	void setX(float x);
+	void setY(float y);
 	int getWidth() {return frameWidth;}
 	int getHeight() {return frameHeight;}
 	bool CollisionEndBlock();
