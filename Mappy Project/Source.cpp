@@ -8,6 +8,8 @@ using namespace std;
 
 int collided(int x, int y);  //Tile Collision
 bool endValue( int x, int y ); //End Block with the User Value = 8
+bool done = false;
+bool timeout = false;
 int main(void)
 {
 	const int WIDTH = 900;
@@ -15,9 +17,10 @@ int main(void)
 	bool keys[] = {false, false, false, false, false};
 	enum KEYS{UP, DOWN, LEFT, RIGHT, SPACE};
 	//variables
-	bool done = false;
+	
 	bool render = false;
 	int count = 0;
+	
 	//Player Variable
 	Sprite player;
 
@@ -27,6 +30,9 @@ int main(void)
 	ALLEGRO_DISPLAY *display = NULL;
 	ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 	ALLEGRO_TIMER *timer;
+
+	void* countdown(ALLEGRO_THREAD* ptr, void* arg);
+
 
 	//program init
 	if(!al_init())										//initialize Allegro
@@ -46,7 +52,7 @@ int main(void)
 
 	int xOff = 0;
 	int yOff = 0;
-	if(MapLoad("test3.FMP", 1))
+	if(MapLoad("test.FMP", 1))
 		return -5;
 
 	event_queue = al_create_event_queue();
@@ -54,8 +60,10 @@ int main(void)
 
 	al_register_event_source(event_queue, al_get_timer_event_source(timer));
 	al_register_event_source(event_queue, al_get_keyboard_event_source());
-
 	al_start_timer(timer);
+
+	ALLEGRO_THREAD* create1 = NULL;
+	create1 = al_create_thread(countdown, NULL);
 	//draw the background tiles
 	MapDrawBG(xOff,yOff, 0, 0, WIDTH-1, HEIGHT-1);
 
@@ -64,8 +72,13 @@ int main(void)
 	player.DrawSprites(0,0);
 	al_flip_display();
 	al_clear_to_color(al_map_rgb(0,0,0));
+	al_start_thread(create1);
 	while(!done)
 	{
+		if (timeout) {
+			std::cout << "time is out" << std::endl;
+			done = true;
+		}
 		ALLEGRO_EVENT ev;
 		al_wait_for_event(event_queue, &ev);
 		if(ev.type == ALLEGRO_EVENT_TIMER)
@@ -81,7 +94,7 @@ int main(void)
 				player.UpdateSprites(WIDTH,HEIGHT,1);
 			else
 				player.UpdateSprites(WIDTH,HEIGHT,4);
-			if (player.CollisionEndBlock())
+			if (player.CollisionEndBlock()) {
 				if (count == 0) {
 					MapLoad("test2.FMP", 1);
 					MapDrawBG(xOff, yOff, 0, 0, WIDTH - 1, HEIGHT - 1);
@@ -91,7 +104,28 @@ int main(void)
 					player.DrawSprites(0, 0);
 					al_flip_display();
 					al_clear_to_color(al_map_rgb(0, 0, 0));
+					count++;
+					al_destroy_thread(create1);
+					al_start_thread(create1);
 				}
+				else if (count == 1) {
+					MapLoad("test3.FMP", 1);
+					MapDrawBG(xOff, yOff, 0, 0, WIDTH - 1, HEIGHT - 1);
+					MapDrawFG(xOff, yOff, 0, 0, WIDTH - 1, HEIGHT - 1, 0);
+					player.setX(40);
+					player.setY(120);
+					player.DrawSprites(0, 0);
+					al_flip_display();
+					al_clear_to_color(al_map_rgb(0, 0, 0));
+					count++;
+					al_destroy_thread(create1);
+					al_start_thread(create1);
+				}
+				else if (count == 2 && player.CollisionEndBlock()) {
+					std::cout << "game over" << std::endl;
+					done = true;
+				}
+			}
 			render = true;
 
 		}
@@ -176,6 +210,7 @@ int main(void)
 		}
 	}
 	MapFreeMem();
+	al_destroy_thread(create1);
 	al_destroy_event_queue(event_queue);
 	al_destroy_display(display);						//destroy our display object
 
@@ -202,4 +237,18 @@ bool endValue( int x, int y )
 		return true;
 	}else
 		return false;
+}
+
+//This function manages the timer for the game
+//It takes allegro thread and void pointers as parameters
+//No return
+void* countdown(ALLEGRO_THREAD* ptr, void* arg) {
+	time_t startTime, currentTime;
+	startTime = time(NULL);
+	currentTime = time(NULL);
+	while (currentTime - startTime < 60 && !done) {
+		currentTime = time(NULL);
+	}
+	timeout = true;
+	return NULL;
 }
